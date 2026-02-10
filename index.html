@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anh Thư - Instagram Messages</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: #000;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 935px;
+            margin: 0 auto;
+            background: #000;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            position: sticky;
+            top: 0;
+            background: #000;
+            border-bottom: 1px solid #262626;
+            padding: 8px 20px;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .header-back {
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .header-back svg {
+            width: 24px;
+            height: 24px;
+            fill: #fff;
+        }
+
+        .header-info {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .header-name {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .header-actions svg {
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .header-actions svg:hover {
+            opacity: 0.7;
+        }
+
+        .header-actions svg {
+            width: 24px;
+            height: 24px;
+            fill: #fff;
+            cursor: pointer;
+        }
+
+        /* Messages Container */
+        .messages-container {
+            padding: 20px;
+            padding-bottom: 80px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        /* Message Bubble */
+        .message {
+            display: flex;
+            margin-bottom: 8px;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.sent {
+            flex-direction: row-reverse;
+        }
+
+        .message.received {
+            flex-direction: row;
+        }
+
+        .message-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 12px;
+            flex-shrink: 0;
+            margin: 0 8px;
+        }
+
+        .message.sent .message-avatar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .message-content {
+            max-width: 60%;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .message-bubble {
+            background: #262626;
+            padding: 8px 12px;
+            border-radius: 22px;
+            word-wrap: break-word;
+            position: relative;
+        }
+
+        .message.sent .message-bubble {
+            background: #3797f0;
+            color: #fff;
+            border-radius: 22px;
+        }
+
+        .message.received .message-bubble {
+            background: #262626;
+            color: #fff;
+        }
+
+        .message-text {
+            line-height: 1.4;
+            font-size: 15px;
+        }
+
+        .message-attachment {
+            margin-top: 6px;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .message-attachment img {
+            max-width: 100%;
+            display: block;
+            border-radius: 8px;
+        }
+
+        .message-attachment a {
+            color: #3797f0;
+            text-decoration: none;
+            font-size: 14px;
+            word-break: break-all;
+        }
+
+        .message-attachment a:hover {
+            text-decoration: underline;
+        }
+
+        .message-attachment audio {
+            width: 100%;
+            max-width: 300px;
+            margin-top: 8px;
+            border-radius: 8px;
+        }
+
+        .message-attachment video {
+            width: 100%;
+            max-width: 100%;
+            border-radius: 8px;
+            margin-top: 8px;
+        }
+
+        .message-reaction {
+            font-size: 12px;
+            color: #a8a8a8;
+            margin-top: 2px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .message-time {
+            font-size: 11px;
+            color: #737373;
+            margin-top: 4px;
+            padding: 0 12px;
+        }
+
+        .message.sent .message-time {
+            text-align: right;
+        }
+
+        .message.received .message-time {
+            text-align: left;
+        }
+
+        /* Date Divider */
+        .date-divider {
+            text-align: center;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .date-divider span {
+            background: #262626;
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: #a8a8a8;
+            font-weight: 500;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #737373;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #262626;
+            border-top-color: #3797f0;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Scroll to bottom button */
+        .scroll-bottom {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 48px;
+            height: 48px;
+            background: #3797f0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .scroll-bottom.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .scroll-bottom svg {
+            width: 24px;
+            height: 24px;
+            fill: #fff;
+        }
+
+        /* Info messages */
+        .message-info {
+            text-align: center;
+            color: #737373;
+            font-size: 13px;
+            padding: 8px 16px;
+            margin: 4px auto;
+        }
+
+        /* Media content */
+        .message-media-caption {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 8px;
+            font-size: 13px;
+            color: #fff;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                max-width: 100%;
+            }
+
+            .messages-container {
+                padding: 16px;
+            }
+
+            .message-content {
+                max-width: 75%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-back" onclick="window.history.back()">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+                </svg>
+            </div>
+            <div class="header-info">
+                <div class="header-avatar">AT</div>
+                <div class="header-name">𝐀𝐧𝐡 𝐓𝐡𝐮̛</div>
+            </div>
+            <div class="header-actions">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" onclick="window.location.href='audio.html'"
+                    title="Audio Player">
+                    <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" />
+                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path
+                        d="M20.34 9.32l-14-7a3 3 0 0 0-4.08 3.9l2.4 5.37a1.06 1.06 0 0 1 0 .82l-2.4 5.37A3 3 0 0 0 5 22a3.14 3.14 0 0 0 1.35-.32l14-7a3 3 0 0 0 0-5.36z" />
+                </svg>
+            </div>
+        </div>
+
+        <!-- Messages -->
+        <div class="messages-container" id="messagesContainer">
+            <div class="loading">
+                <div class="loading-spinner"></div>
+                <div>Đang tải tin nhắn...</div>
+            </div>
+        </div>
+
+        <!-- Scroll to bottom button -->
+        <div class="scroll-bottom" id="scrollBottom" onclick="scrollToBottom()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z" />
+            </svg>
+        </div>
+    </div>
+
+    <script>
+        const messageFiles = [5, 4, 3, 2, 1]; // Bắt đầu từ file 5 (cũ nhất) đến file 1 (mới nhất)
+        let currentFileIndex = 0;
+        let currentFileMessages = [];
+        let currentMessageIndex = 0;
+        let isLoading = false;
+        let hasMoreMessages = true;
+        const MESSAGES_PER_BATCH = 20; // Load 20 tin nhắn mỗi lần
+        let lastRenderedDate = '';
+        const renderedMessageKeys = new Set(); // Chống trùng lặp tin nhắn
+
+        // Parse một file và trả về danh sách messages
+        async function parseMessageFile(fileNum) {
+            try {
+                const response = await fetch(`your_instagram_activity/messages/inbox/anhthu_473257607401794/message_${fileNum}.html`);
+                const html = await response.text();
+
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+
+                const messageBoxes = doc.querySelectorAll('.pam._3-95._2ph-._a6-g.uiBoxWhite.noborder');
+                const messagesArray = Array.from(messageBoxes).reverse(); // Đảo ngược để cũ nhất lên trước
+
+                const messages = [];
+
+                messagesArray.forEach(box => {
+                    const sender = box.querySelector('h2')?.textContent.trim() || '';
+                    const contentDiv = box.querySelector('._a6-p');
+                    const timeDiv = box.querySelector('._a6-o');
+                    const time = timeDiv?.textContent.trim() || '';
+
+                    if (contentDiv) {
+                        const textContent = [];
+                        const seenTexts = new Set(); // Track text đã lấy để tránh duplicate
+                        const divs = contentDiv.querySelectorAll('div');
+
+                        divs.forEach(div => {
+                            // Chỉ lấy text từ divs không có child divs (leaf nodes)
+                            const hasChildDivs = div.querySelector('div') !== null;
+                            if (hasChildDivs) return;
+
+                            const text = div.textContent.trim();
+                            if (text &&
+                                !seenTexts.has(text) && // Kiểm tra đã lấy chưa
+                                !text.includes('sent an attachment') &&
+                                !text.includes('You sent an attachment') &&
+                                !text.includes('Reacted') &&
+                                !text.includes('Liked a message') &&
+                                !text.includes('Click for audio') &&
+                                !text.includes('Click for video')) {
+                                textContent.push(text);
+                                seenTexts.add(text);
+                            }
+                        });
+
+                        const links = contentDiv.querySelectorAll('a');
+                        const images = contentDiv.querySelectorAll('img');
+                        const reactionElements = contentDiv.querySelectorAll('._a6-q li span');
+
+                        let reactions = [];
+                        reactionElements.forEach(el => {
+                            reactions.push(el.textContent.trim());
+                        });
+
+                        const isSent = sender.includes('𝓑𝓸̂̀ 𝓬𝓸̂ 𝓣𝓱𝓾̛') || sender.includes('You');
+
+                        const audioFiles = [];
+                        const videoFiles = [];
+                        const normalLinks = [];
+
+                        links.forEach(a => {
+                            const href = a.href;
+                            const text = a.textContent.trim();
+
+                            if (href.includes('/audio/') || text.includes('Click for audio')) {
+                                audioFiles.push(href);
+                            }
+                            else if (href.includes('/video/') || href.includes('/videos/') || text.includes('Click for video')) {
+                                videoFiles.push(href);
+                            }
+                            else {
+                                normalLinks.push({
+                                    href: href,
+                                    text: text
+                                });
+                            }
+                        });
+
+                        messages.push({
+                            sender: sender,
+                            isSent: isSent,
+                            text: textContent.join(' '),
+                            links: normalLinks,
+                            audioFiles: audioFiles,
+                            videoFiles: videoFiles,
+                            images: Array.from(images).map(img => img.src),
+                            reactions: reactions,
+                            time: time
+                        });
+                    }
+                });
+
+                return messages;
+            } catch (error) {
+                console.error('Error loading file:', error);
+                return [];
+            }
+        }
+
+        // Load batch tin nhắn tiếp theo
+        async function loadMoreMessages() {
+            if (isLoading || !hasMoreMessages) return;
+
+            isLoading = true;
+            const container = document.getElementById('messagesContainer');
+
+            // Nếu chưa có messages từ file hiện tại, load file mới
+            if (currentMessageIndex >= currentFileMessages.length) {
+                if (currentFileIndex >= messageFiles.length) {
+                    hasMoreMessages = false;
+                    const loadingEl = container.querySelector('.loading');
+                    if (loadingEl) loadingEl.remove();
+                    isLoading = false;
+                    return;
+                }
+
+                const fileNum = messageFiles[currentFileIndex];
+                currentFileMessages = await parseMessageFile(fileNum);
+                currentMessageIndex = 0;
+                currentFileIndex++;
+            }
+
+            // Lấy batch messages
+            const batch = currentFileMessages.slice(currentMessageIndex, currentMessageIndex + MESSAGES_PER_BATCH);
+            currentMessageIndex += MESSAGES_PER_BATCH;
+
+            // Render batch
+            renderMessageBatch(batch);
+
+            // Xóa loading indicator nếu đã load xong file cuối
+            if (currentFileIndex >= messageFiles.length && currentMessageIndex >= currentFileMessages.length) {
+                hasMoreMessages = false;
+                const loadingEl = container.querySelector('.loading');
+                if (loadingEl) loadingEl.remove();
+            }
+
+            isLoading = false;
+        }
+
+        function renderMessageBatch(messages) {
+            const container = document.getElementById('messagesContainer');
+            const loadingEl = container.querySelector('.loading');
+
+            messages.forEach((msg) => {
+                // Tạo key duy nhất cho tin nhắn để chống trùng lặp
+                const messageKey = `${msg.sender}_${msg.time}_${msg.text.substring(0, 50)}`;
+
+                // Bỏ qua nếu tin nhắn đã được render
+                if (renderedMessageKeys.has(messageKey)) {
+                    return;
+                }
+                renderedMessageKeys.add(messageKey);
+
+                const date = msg.time.split(',')[0];
+
+                // Add date divider if date changed
+                if (date && date !== lastRenderedDate) {
+                    const dateDivider = document.createElement('div');
+                    dateDivider.className = 'date-divider';
+                    dateDivider.innerHTML = `<span>${date}</span>`;
+                    if (loadingEl) {
+                        container.insertBefore(dateDivider, loadingEl);
+                    } else {
+                        container.appendChild(dateDivider);
+                    }
+                    lastRenderedDate = date;
+                }
+
+                // Create message element
+                const messageEl = document.createElement('div');
+                messageEl.className = `message ${msg.isSent ? 'sent' : 'received'}`;
+
+                let avatarHTML = msg.isSent
+                    ? '<div class="message-avatar">Zii</div>'
+                    : '<div class="message-avatar">AT</div>';
+
+                // Check if it's an info message
+                if (msg.text.includes('Reacted') || msg.text.includes('Liked a message')) {
+                    messageEl.className = 'message-info';
+                    messageEl.innerHTML = `${msg.sender.split(' ')[0]} ${msg.text}`;
+                } else {
+                    let bubbleContent = '';
+
+                    // Add text
+                    if (msg.text) {
+                        bubbleContent += `<div class="message-text">${escapeHtml(msg.text)}</div>`;
+                    }
+
+                    // Add attachments
+                    if (msg.links.length > 0 || msg.images.length > 0 || msg.audioFiles.length > 0 || msg.videoFiles.length > 0) {
+                        bubbleContent += '<div class="message-attachment">';
+
+                        msg.images.forEach(imgSrc => {
+                            bubbleContent += `<img src="${imgSrc}" alt="attachment">`;
+                        });
+
+                        msg.audioFiles.forEach(audioSrc => {
+                            bubbleContent += `<audio controls><source src="${audioSrc}" type="audio/mpeg">Your browser does not support the audio element.</audio>`;
+                        });
+
+                        msg.videoFiles.forEach(videoSrc => {
+                            bubbleContent += `<video controls><source src="${videoSrc}" type="video/mp4">Your browser does not support the video element.</video>`;
+                        });
+
+                        msg.links.forEach(link => {
+                            if (link.text && !link.text.startsWith('https://')) {
+                                bubbleContent += `<div class="message-media-caption">${escapeHtml(link.text)}</div>`;
+                            }
+                            if (link.href && link.href.startsWith('http')) {
+                                bubbleContent += `<a href="${link.href}" target="_blank">🔗 ${link.href.substring(0, 50)}...</a><br>`;
+                            }
+                        });
+
+                        bubbleContent += '</div>';
+                    }
+
+                    // Add reactions
+                    if (msg.reactions.length > 0) {
+                        bubbleContent += `<div class="message-reaction">${msg.reactions.join(' ')}</div>`;
+                    }
+
+                    const contentHTML = `
+                        ${avatarHTML}
+                        <div class="message-content">
+                            <div class="message-bubble">
+                                ${bubbleContent}
+                            </div>
+                            <div class="message-time">${msg.time}</div>
+                        </div>
+                    `;
+
+                    messageEl.innerHTML = contentHTML;
+                }
+
+                if (loadingEl) {
+                    container.insertBefore(messageEl, loadingEl);
+                } else {
+                    container.appendChild(messageEl);
+                }
+            });
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function scrollToBottom() {
+            window.scrollTo({
+                top: document.body.scrollHeight,
+                behavior: 'smooth'
+            });
+        }
+
+        // Detect scroll to load more messages
+        let scrollTimeout;
+        window.addEventListener('scroll', () => {
+            const scrollButton = document.getElementById('scrollBottom');
+            const scrollPosition = window.scrollY + window.innerHeight;
+            const pageHeight = document.body.scrollHeight;
+
+            // Show/hide scroll to bottom button
+            if (pageHeight - scrollPosition > 500) {
+                scrollButton.classList.add('show');
+            } else {
+                scrollButton.classList.remove('show');
+            }
+
+            // Load more messages when scrolling near bottom
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                if (pageHeight - scrollPosition < 800 && hasMoreMessages && !isLoading) {
+                    loadMoreMessages();
+                }
+            }, 100);
+        });
+
+        // Load initial batch of messages
+        loadMoreMessages();
+    </script>
+</body>
+
+</html>
