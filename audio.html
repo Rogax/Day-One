@@ -258,7 +258,12 @@
 
                             // Kiểm tra xem có phải audio file không
                             if (href.includes('/audio/') || text.includes('Click for audio')) {
-                                audioFiles.push(href);
+                                // Chuyển từ absolute URL sang relative path
+                                let audioPath = href;
+                                if (href.includes('your_instagram_activity')) {
+                                    audioPath = './' + href.substring(href.indexOf('your_instagram_activity'));
+                                }
+                                audioFiles.push(audioPath);
                             }
                         });
 

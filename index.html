@@ -461,10 +461,20 @@
                             const text = a.textContent.trim();
 
                             if (href.includes('/audio/') || text.includes('Click for audio')) {
-                                audioFiles.push(href);
+                                // Chuyển sang relative path cho GitHub Pages
+                                let audioPath = href;
+                                if (href.includes('your_instagram_activity')) {
+                                    audioPath = './' + href.substring(href.indexOf('your_instagram_activity'));
+                                }
+                                audioFiles.push(audioPath);
                             }
                             else if (href.includes('/video/') || href.includes('/videos/') || text.includes('Click for video')) {
-                                videoFiles.push(href);
+                                // Chuyển sang relative path cho GitHub Pages
+                                let videoPath = href;
+                                if (href.includes('your_instagram_activity')) {
+                                    videoPath = './' + href.substring(href.indexOf('your_instagram_activity'));
+                                }
+                                videoFiles.push(videoPath);
                             }
                             else {
                                 normalLinks.push({
@@ -481,7 +491,14 @@
                             links: normalLinks,
                             audioFiles: audioFiles,
                             videoFiles: videoFiles,
-                            images: Array.from(images).map(img => img.src),
+                            images: Array.from(images).map(img => {
+                                // Chuyển img src sang relative path
+                                let imgSrc = img.src;
+                                if (imgSrc.includes('your_instagram_activity')) {
+                                    imgSrc = './' + imgSrc.substring(imgSrc.indexOf('your_instagram_activity'));
+                                }
+                                return imgSrc;
+                            }),
                             reactions: reactions,
                             time: time
                         });
