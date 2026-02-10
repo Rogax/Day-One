@@ -231,7 +231,7 @@
         // Parse một file và extract audio
         async function parseMessageFile(fileNum) {
             try {
-                const response = await fetch(`your_instagram_activity/messages/inbox/anhthu_473257607401794/message_${fileNum}.html`);
+                const response = await fetch(`./your_instagram_activity/messages/inbox/anhthu_473257607401794/message_${fileNum}.html`);
                 const html = await response.text();
 
                 const parser = new DOMParser();
